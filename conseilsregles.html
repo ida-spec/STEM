@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon - Conseils règles</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .conseils-container {
+            max-width: 720px;
+            margin: 60px auto;
+            padding: 0 1.5rem;
+        }
+        .phase-header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .phase-header .phase-emoji {
+            font-size: 3rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .phase-header h1 {
+            font-size: 1.75rem;
+            color: #1e293b;
+            margin-bottom: 0.5rem;
+        }
+        .phase-header p {
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+        .card {
+            background: white;
+            border-radius: 15px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border: 2px solid #e2e8f0;
+            transition: border-color 0.2s, transform 0.2s;
+        }
+        .card:hover {
+            border-color: #ec4899;
+            transform: translateY(-2px);
+        }
+        .card h3 {
+            margin-bottom: 1rem;
+            color: #1e293b;
+            font-size: 1rem;
+        }
+        .note-tips {
+            background: #f8fafc;
+            padding: 1rem;
+            border-radius: 10px;
+            margin-bottom: 0.75rem;
+        }
+        .note-tips:last-child { margin-bottom: 0; }
+        .note-tips p {
+            color: #475569;
+            font-size: 0.9rem;
+            margin-bottom: 0.35rem;
+            padding-left: 0.25rem;
+        }
+        .note-tips p:last-child { margin-bottom: 0; }
+        .tag {
+            display: inline-block;
+            background: #ec4899;
+            color: white;
+            padding: 3px 10px;
+            border-radius: 999px;
+            font-size: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        .tag.green  { background: #10b981; }
+        .tag.blue   { background: #3b82f6; }
+        .tag.purple { background: #8b5cf6; }
+        .tag.orange { background: #f59e0b; }
+        .button-group {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .btn-back {
+            flex: 1;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+            background: #f1f5f9;
+            color: #1e293b;
+        }
+        .btn-next {
+            flex: 2;
+            padding: 12px;
+            border-radius: 10px;
+            cursor: pointer;
+            border: none;
+            font-weight: bold;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            color: white;
+        }
+        .btn-next:hover { opacity: 0.9; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">🌸 moon</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="choix.html" class="nav-link active">Ajouter</a></li>
+                <li><a href="#" class="nav-link">Historique</a></li>
+                <li><a href="#" class="nav-link">Paramètres</a></li>
+                <li><a href="#" class="nav-link logout-btn" onclick="logout()">Déconnexion</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="conseils-container">
+
+        <div class="phase-header">
+            <span class="phase-emoji">🔴</span>
+            <h1>Tu es en phase menstruelle</h1>
+            <p>C'est le moment de te reposer et de prendre soin de toi. Voici quelques conseils adaptés.</p>
+        </div>
+
+        <div class="card">
+            <h3>🌿 Conseils pour traverser cette phase avec douceur</h3>
+
+            <div class="note-tips">
+                <span class="tag">🛋️ Repos</span>
+                <p>Accorde-toi plus de temps de sommeil</p>
+                <p>Écoute ton corps et repose-toi quand tu en as besoin</p>
+                <p>Réduis les engagements non essentiels</p>
+            </div>
+
+            <div class="note-tips">
+                <span class="tag green">🥗 Nutrition</span>
+                <p>Mange des aliments riches en fer (épinards, lentilles, viande rouge)</p>
+                <p>Évite le café et l'alcool qui aggravent les crampes</p>
+                <p>Reste bien hydratée — 8 verres d'eau minimum</p>
+                <p>Le chocolat noir (70%+) peut aider contre les envies</p>
+            </div>
+
+            <div class="note-tips">
+                <span class="tag blue">🏃 Activité physique</span>
+                <p>Privilégie des exercices doux : yoga, marche, étirements</p>
+                <p>Évite les sports intenses les premiers jours</p>
+                <p>Le mouvement léger aide à réduire les crampes</p>
+            </div>
+
+            <div class="note-tips">
+                <span class="tag purple">💆 Bien-être mental</span>
+                <p>C'est normal de te sentir plus émotive — sois indulgente avec toi-même</p>
+                <p>Prends des bains chauds pour détendre les muscles</p>
+                <p>Une bouillotte sur le ventre peut soulager les douleurs</p>
+                <p>Évite les situations stressantes si possible</p>
+            </div>
+
+            <div class="note-tips">
+                <span class="tag orange">⚠️ À surveiller</span>
+                <p>Douleurs très intenses ou saignements excessifs → consulte un médecin</p>
+                <p>Note la durée et l'intensité de tes règles dans ton journal</p>
+            </div>
+        </div>
+
+        <div class="button-group">
+            <button class="btn-back" onclick="history.back()">← Retour</button>
+            <button class="btn-next" onclick="window.location.href='index.html'">🏠 Retour au dashboard</button>
+        </div>
+
+    </div>
+
+<script>
+    (function () {
+        const user = JSON.parse(localStorage.getItem("currentUser"));
+        if (!user || !user.email) window.location.href = "inscription.html";
+    })();
+
+    function logout() {
+        localStorage.removeItem("currentUser");
+        window.location.href = "inscription.html";
+    }
+</script>
+
+</body>
+</html>

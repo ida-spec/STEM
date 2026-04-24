@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon - Ajouter une entrée</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .choices-container {
+            max-width: 600px;
+            margin: 80px auto;
+            background: white;
+            border-radius: 20px;
+            padding: 2.5rem;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .choices-container h1 {
+            font-size: 1.75rem;
+            margin-bottom: 0.5rem;
+            color: #1e293b;
+        }
+        .choices-container .subtitle {
+            color: #64748b;
+            margin-bottom: 2rem;
+        }
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+        .option-btn {
+            padding: 1rem 1.5rem;
+            border: none;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            color: white;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .option-btn:hover {
+            opacity: 0.9;
+            transform: translateY(-2px);
+        }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">🌸 moon</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="choix.html" class="nav-link active">Ajouter</a></li>
+                <li><a href="#" class="nav-link">Historique</a></li>
+                <li><a href="#" class="nav-link">Paramètres</a></li>
+                <li><a href="#" class="nav-link logout-btn" onclick="logout()">Déconnexion</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="choices-container">
+        <h1>🌸 Où en es-tu dans ton cycle ?</h1>
+        <p class="subtitle">Choisis la situation qui correspond à aujourd'hui</p>
+        <div class="options">
+            <button class="option-btn" onclick="goRules()">🔴 J'ai mes règles</button>
+            <button class="option-btn" onclick="goUnknown()">🤔 Je ne sais pas</button>
+        </div>
+    </div>
+
+<script>
+    // Guard : rediriger si non connectée
+    (function () {
+        const user = JSON.parse(localStorage.getItem("currentUser"));
+        if (!user || !user.email) {
+            window.location.href = "inscription.html";
+        }
+    })();
+
+    function goRules() {
+        window.location.href = "questions.html";
+    }
+
+    function goUnknown() {
+        window.location.href = "phase.html";
+    }
+
+    function logout() {
+        localStorage.removeItem("currentUser");
+        window.location.href = "inscription.html";
+    }
+</script>
+
+</body>
+</html>
