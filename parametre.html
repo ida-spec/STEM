@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Paramètres - CycleTrack</title>
+
+<style>
+/* RESET */
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+body{
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #fbcfe8, #ddd6fe);
+    transition: 0.3s;
+}
+
+/* ===== THEME SOMBRE ===== */
+body.dark{
+    background:#0f172a;
+    color:#f1f5f9;
+}
+
+/* ===== NAVBAR ===== */
+.navbar{
+    background:white;
+    box-shadow:0 5px 15px rgba(0,0,0,0.1);
+    position:sticky;
+    top:0;
+    z-index:100;
+}
+
+body.dark .navbar{
+    background:#1e293b;
+}
+
+.nav-container{
+    max-width:1200px;
+    margin:auto;
+    padding:1rem 1.5rem;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+}
+
+.nav-logo{
+    font-size:1.5rem;
+    font-weight:bold;
+    background:linear-gradient(135deg,#ec4899,#8b5cf6);
+    -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent;
+}
+
+.nav-menu{
+    display:flex;
+    list-style:none;
+    gap:1.5rem;
+}
+
+.nav-link{
+    text-decoration:none;
+    color:#333;
+    font-weight:500;
+}
+
+body.dark .nav-link{
+    color:#f1f5f9;
+}
+
+/* ===== CONTAINER ===== */
+.container{
+    max-width:600px;
+    margin:80px auto;
+    background:white;
+    padding:2rem;
+    border-radius:20px;
+    box-shadow:0 10px 30px rgba(0,0,0,0.1);
+}
+
+body.dark .container{
+    background:#1e293b;
+}
+
+/* CARD */
+.card{
+    background:#f8fafc;
+    padding:1rem;
+    border-radius:15px;
+    margin-bottom:15px;
+}
+
+body.dark .card{
+    background:#334155;
+}
+
+/* INPUT */
+input, select{
+    width:100%;
+    padding:10px;
+    margin-top:5px;
+    border-radius:8px;
+    border:1px solid #ccc;
+}
+
+/* TOGGLE */
+.toggle{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    margin-top:10px;
+}
+
+/* BUTTON */
+button{
+    width:100%;
+    padding:12px;
+    border:none;
+    border-radius:10px;
+    cursor:pointer;
+    margin-top:10px;
+}
+
+.save{
+    background:#ec4899;
+    color:white;
+}
+
+.reset{
+    background:#e2e8f0;
+}
+</style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-logo">🌸 moon</div>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link">Dashboard</a></li>
+            <li><a href="choix.html" class="nav-link">Ajouter</a></li>
+            <li><a href="settings.html" class="nav-link">Paramètres</a></li>
+        </ul>
+    </div>
+</nav>
+
+<!-- SETTINGS -->
+<div class="container">
+
+    <h2>⚙️ Paramètres</h2>
+
+    <!-- THEME -->
+    <div class="card">
+        <h3>🎨 Thème</h3>
+        <select id="theme">
+            <option value="light">Clair 🌞</option>
+            <option value="dark">Sombre 🌙</option>
+        </select>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="card">
+        <h3>🔔 Notifications</h3>
+
+        <div class="toggle">
+            <span>Activer</span>
+            <input type="checkbox" id="notif">
+        </div>
+    </div>
+
+    <!-- CYCLE -->
+    <div class="card">
+        <h3>📅 Durée du cycle</h3>
+        <input type="number" id="cycle" min="20" max="40">
+    </div>
+
+    <!-- BUTTONS -->
+    <button class="save" onclick="saveSettings()">💾 Sauvegarder</button>
+    <button class="reset" onclick="resetSettings()">♻️ Réinitialiser</button>
+
+</div>
+
+<script>
+
+/* APPLY SETTINGS */
+function applySettings(){
+
+    const theme = localStorage.getItem("theme");
+    const notif = localStorage.getItem("notif");
+    const cycle = localStorage.getItem("cycle");
+
+    if(theme === "dark"){
+        document.body.classList.add("dark");
+        document.getElementById("theme").value = "dark";
+    } else {
+        document.body.classList.remove("dark");
+        document.getElementById("theme").value = "light";
+    }
+
+    document.getElementById("notif").checked = (notif === "true");
+    document.getElementById("cycle").value = cycle || 28;
+}
+
+/* SAVE */
+function saveSettings(){
+
+    localStorage.setItem("theme", document.getElementById("theme").value);
+    localStorage.setItem("notif", document.getElementById("notif").checked);
+    localStorage.setItem("cycle", document.getElementById("cycle").value);
+
+    applySettings();
+
+    alert("Paramètres sauvegardés !");
+}
+
+/* RESET */
+function resetSettings(){
+    localStorage.clear();
+    location.reload();
+}
+
+/* INIT */
+document.addEventListener("DOMContentLoaded", applySettings);
+
+function applyTheme(theme){
+    if(theme === "dark"){
+        document.body.classList.add("dark");
+    } else {
+        document.body.classList.remove("dark");
+    }
+}
+
+/* LOAD SETTINGS */
+function applySettings(){
+
+    const theme = localStorage.getItem("theme") || "light";
+    const notif = localStorage.getItem("notif");
+    const cycle = localStorage.getItem("cycle");
+
+    // appliquer thème
+    applyTheme(theme);
+    document.getElementById("theme").value = theme;
+
+    // notif
+    document.getElementById("notif").checked = (notif === "true");
+
+    // cycle
+    document.getElementById("cycle").value = cycle || 28;
+}
+
+/* SAVE */
+function saveSettings(){
+
+    const theme = document.getElementById("theme").value;
+
+    localStorage.setItem("theme", theme);
+    localStorage.setItem("notif", document.getElementById("notif").checked);
+    localStorage.setItem("cycle", document.getElementById("cycle").value);
+
+    applyTheme(theme);
+
+    alert("Paramètres sauvegardés !");
+}
+
+/* CHANGE THEME INSTANT */
+document.addEventListener("DOMContentLoaded", ()=>{
+    applySettings();
+
+    document.getElementById("theme").addEventListener("change", (e)=>{
+        applyTheme(e.target.value);
+    });
+});
+
+</script>
+
+</body>
+</html>
