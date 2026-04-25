@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon - Mes règles</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .questions-container {
+            background: white;
+            width: 90%;
+            max-width: 480px;
+            margin: 60px auto;
+            padding: 2rem;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+        .page { display: none; }
+        .page.active { display: block; }
+
+        h1 { margin-bottom: 1rem; font-size: 1.5rem; color: #1e293b; }
+
+        .card {
+            border: 2px solid #e2e8f0;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: 0.2s;
+            color: #1e293b;
+        }
+        .card:hover { border-color: #ec4899; }
+        .card.selected {
+            background: #fce7f3;
+            border-color: #ec4899;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin-top: 1.5rem;
+        }
+        .back {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: #f1f5f9;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        .next {
+            flex: 2;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            color: white;
+            cursor: pointer;
+            font-weight: 600;
+        }
+        textarea {
+            width: 100%;
+            height: 80px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 0.75rem;
+            font-family: inherit;
+            font-size: 1rem;
+            resize: vertical;
+        }
+        textarea:focus { outline: none; border-color: #ec4899; }
+        input[type="range"] { width: 100%; margin: 1rem 0; }
+        .energy-label {
+            text-align: center;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .result-box {
+            background: #f8fafc;
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+        }
+        .result-box p { margin-bottom: 0.5rem; color: #1e293b; }
+        .result-box strong { color: #ec4899; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">🌸 moon</div>
+            <ul class="nav-menu">
+                <li><a href="index.html" class="nav-link">Dashboard</a></li>
+                <li><a href="choix.html" class="nav-link active">Ajouter</a></li>
+                <li><a href="#" class="nav-link">Historique</a></li>
+                <li><a href="#" class="nav-link">Paramètres</a></li>
+                <li><a href="#" class="nav-link logout-btn" onclick="logout()">Déconnexion</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="questions-container">
+
+        <!-- Q1 : Où en es-tu ? -->
+        <div id="q1" class="page active">
+            <h1>🌸 Règles</h1>
+            <div class="card" onclick="selectQ1(this,'debut')">🌑 Je commence aujourd'hui</div>
+            <div class="card" onclick="selectQ1(this,'cours')">🔴 C'est en cours</div>
+            <div class="card" onclick="selectQ1(this,'fin')">🌕 Je suis à la fin</div>
+        </div>
+
+        <!-- Q2 : Flux -->
+        <div id="q2" class="page">
+            <h1>💧 Flux</h1>
+            <div class="card" onclick="selectQ2(this,'leger')">🩸 Léger</div>
+            <div class="card" onclick="selectQ2(this,'normal')">🩸🩸 Normal</div>
+            <div class="card" onclick="selectQ2(this,'abondant')">🩸🩸🩸 Abondant</div>
+            <div class="button-group">
+                <button class="back" onclick="prev()">← Retour</button>
+                <button class="next" onclick="next()">Suivant →</button>
+            </div>
+        </div>
+
+        <!-- Q3 : Symptômes -->
+        <div id="q3" class="page">
+            <h1>🤕 Symptômes</h1>
+            <div class="card" onclick="toggleSymptom(this,'fatigue')">😴 Fatigue</div>
+            <div class="card" onclick="toggleSymptom(this,'crampes')">😣 Crampes</div>
+            <div class="card" onclick="toggleSymptom(this,'humeur')">😤 Humeur changeante</div>
+            <div class="card" onclick="toggleSymptom(this,'maux_tete')">🤯 Maux de tête</div>
+            <div class="card" onclick="toggleSymptom(this,'ballonnements')">🫧 Ballonnements</div>
+            <div class="button-group">
+                <button class="back" onclick="prev()">← Retour</button>
+                <button class="next" onclick="next()">Suivant →</button>
+            </div>
+        </div>
+
+        <!-- Q4 : Énergie -->
+        <div id="q4" class="page">
+            <h1>⚡ Énergie</h1>
+            <div class="energy-label" id="energy-emoji">😐</div>
+            <input type="range" min="1" max="5" value="3" oninput="updateEnergy(this.value)">
+            <div style="display:flex;justify-content:space-between;font-size:0.8rem;color:#64748b;">
+                <span>Épuisée</span><span>Pleine d'énergie</span>
+            </div>
+            <div class="button-group">
+                <button class="back" onclick="prev()">← Retour</button>
+                <button class="next" onclick="next()">Suivant →</button>
+            </div>
+        </div>
+
+        <!-- Q5 : Humeur -->
+        <div id="q5" class="page">
+            <h1>💭 Humeur</h1>
+            <div class="card" onclick="selectMood(this,'triste')">😢 Triste</div>
+            <div class="card" onclick="selectMood(this,'irritee')">😤 Irritée</div>
+            <div class="card" onclick="selectMood(this,'neutre')">😐 Neutre</div>
+            <div class="card" onclick="selectMood(this,'heureuse')">😊 Heureuse</div>
+            <div class="button-group">
+                <button class="back" onclick="prev()">← Retour</button>
+                <button class="next" onclick="next()">Suivant →</button>
+            </div>
+        </div>
+
+        <!-- Q6 : Sport -->
+        <div id="q6" class="page">
+            <h1>🏃 Sport</h1>
+            <div class="card" onclick="selectSport(this,'aucun')">🛋️ Aucun</div>
+            <div class="card" onclick="selectSport(this,'leger')">🚶 Léger (marche, yoga)</div>
+            <div class="card" onclick="selectSport(this,'intense')">🏋️ Intense</div>
+            <div class="button-group">
+                <button class="back" onclick="prev()">← Retour</button>
+                <button class="next" onclick="next()">Suivant →</button>
+            </div>
+        </div>
+
+        <!-- Q7 : Notes -->
+        <div id="q7" class="page">
+            <h1>📝 Notes libres</h1>
+            <textarea placeholder="Ajoute des détails si tu le souhaites..." oninput="data.notes=this.value"></textarea>
+            <div class="button-group">
+                <button class="back" onclick="prev()">← Retour</button>
+                <button class="next" onclick="showResult()">Terminer ✓</button>
+            </div>
+        </div>
+
+        <!-- RÉSULTAT -->
+        <div id="result" class="page">
+            <h1>✅ Entrée enregistrée</h1>
+            <div class="result-box" id="resultContent"></div>
+            <div class="button-group">
+                <button class="back" onclick="restart()">Nouvelle entrée</button>
+                <button class="next" onclick="goNext()">Voir conseils →</button>
+            </div>
+        </div>
+
+    </div>
+
+<script>
+    // Guard connexion
+    (function () {
+        const user = JSON.parse(localStorage.getItem("currentUser"));
+        if (!user || !user.email) window.location.href = "inscription.html";
+    })();
+
+    const pages = ["q1","q2","q3","q4","q5","q6","q7","result"];
+    let currentIndex = 0;
+
+    let data = {
+        date: new Date().toLocaleDateString("fr-FR"),
+        rules: null,
+        flow: null,
+        symptoms: [],
+        energy: 3,
+        mood: null,
+        sport: null,
+        notes: ""
+    };
+
+    const energyEmojis = ["", "😴", "😔", "😐", "🙂", "😄"];
+
+    function showPage(i) {
+        pages.forEach(id => document.getElementById(id).classList.remove("active"));
+        document.getElementById(pages[i]).classList.add("active");
+        currentIndex = i;
+    }
+
+    function next() {
+        if (currentIndex === pages.indexOf("q7")) { showResult(); return; }
+        if (currentIndex < pages.length - 1) showPage(currentIndex + 1);
+    }
+
+    function prev() {
+        if (currentIndex > 0) showPage(currentIndex - 1);
+    }
+
+    function selectQ1(el, val) {
+        document.querySelectorAll('#q1 .card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        data.rules = val;
+        showPage(1);
+    }
+
+    function selectQ2(el, val) {
+        document.querySelectorAll('#q2 .card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        data.flow = val;
+    }
+
+    function toggleSymptom(el, val) {
+        el.classList.toggle('selected');
+        if (data.symptoms.includes(val)) {
+            data.symptoms = data.symptoms.filter(s => s !== val);
+        } else {
+            data.symptoms.push(val);
+        }
+    }
+
+    function updateEnergy(val) {
+        data.energy = parseInt(val);
+        document.getElementById("energy-emoji").innerText = energyEmojis[parseInt(val)];
+    }
+
+    function selectMood(el, val) {
+        document.querySelectorAll('#q5 .card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        data.mood = val;
+    }
+
+    function selectSport(el, val) {
+        document.querySelectorAll('#q6 .card').forEach(c => c.classList.remove('selected'));
+        el.classList.add('selected');
+        data.sport = val;
+    }
+
+    function showResult() {
+        // Sauvegarder dans localStorage
+        const user = JSON.parse(localStorage.getItem("currentUser"));
+        if (user) {
+            let history = JSON.parse(localStorage.getItem("history_" + user.email)) || [];
+            history.unshift(data);
+            localStorage.setItem("history_" + user.email, JSON.stringify(history));
+        }
+
+        showPage(pages.indexOf("result"));
+
+        const symptomsLabel = data.symptoms.length > 0 ? data.symptoms.join(", ") : "Aucun";
+        document.getElementById("resultContent").innerHTML = `
+            <p>📅 <strong>Date :</strong> ${data.date}</p>
+            <p>🔴 <strong>Règles :</strong> ${data.rules || "—"}</p>
+            <p>💧 <strong>Flux :</strong> ${data.flow || "—"}</p>
+            <p>🤕 <strong>Symptômes :</strong> ${symptomsLabel}</p>
+            <p>⚡ <strong>Énergie :</strong> ${energyEmojis[data.energy]} (${data.energy}/5)</p>
+            <p>💭 <strong>Humeur :</strong> ${data.mood || "—"}</p>
+            <p>🏃 <strong>Sport :</strong> ${data.sport || "—"}</p>
+            ${data.notes ? `<p>📝 <strong>Notes :</strong> ${data.notes}</p>` : ""}
+        `;
+    }
+
+    function restart() { location.reload(); }
+
+    function goNext() { window.location.href = "conseilsregles.html"; }
+
+    function logout() {
+        localStorage.removeItem("currentUser");
+        window.location.href = "inscription.html";
+    }
+
+    showPage(0);
+</script>
+
+</body>
+</html>
