@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Moon - Paramètres</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        .settings-page {
+            max-width: 680px;
+            margin: 60px auto;
+            padding: 0 1.5rem 4rem;
+        }
+        .settings-page-title {
+            font-size: 1.75rem;
+            font-weight: 700;
+            color: var(--text-dark);
+            margin-bottom: 0.4rem;
+        }
+        .settings-page-subtitle {
+            color: var(--text-light);
+            font-size: 0.95rem;
+            margin-bottom: 2rem;
+        }
+        .settings-block {
+            background: var(--bg-white);
+            border-radius: 16px;
+            box-shadow: var(--shadow-md);
+            margin-bottom: 1.25rem;
+            overflow: hidden;
+        }
+        .settings-block-header {
+            padding: 1.1rem 1.5rem 0.6rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .settings-block-header h3 {
+            font-size: 0.8rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--primary-color);
+        }
+        .settings-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            gap: 1rem;
+        }
+        .settings-row:last-child { border-bottom: none; }
+        .settings-row-info { flex: 1; }
+        .settings-row-label {
+            font-weight: 600;
+            font-size: 0.95rem;
+            color: var(--text-dark);
+            margin-bottom: 2px;
+        }
+        .settings-row-desc {
+            font-size: 0.82rem;
+            color: var(--text-light);
+            line-height: 1.4;
+        }
+
+        /* Toggle switch */
+        .toggle-wrap { flex-shrink: 0; }
+        .toggle-input { display: none; }
+        .toggle-track {
+            display: flex;
+            align-items: center;
+            width: 52px;
+            height: 30px;
+            border-radius: 999px;
+            background: var(--border-color);
+            cursor: pointer;
+            transition: background 0.3s ease;
+            position: relative;
+        }
+        .toggle-thumb {
+            position: absolute;
+            left: 3px;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 1px 4px rgba(0,0,0,0.2);
+            transition: left 0.3s ease;
+        }
+        .toggle-input:checked + .toggle-track {
+            background: var(--primary-color);
+        }
+        .toggle-input:checked + .toggle-track .toggle-thumb {
+            left: 25px;
+        }
+
+        /* Thème preview */
+        .theme-preview {
+            display: flex;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem 1.25rem;
+        }
+        .theme-swatch {
+            flex: 1;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: border-color 0.2s, transform 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 0.6rem;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        .theme-swatch:hover { transform: translateY(-1px); }
+        .theme-swatch.selected { border-color: var(--primary-color); }
+        .swatch-light {
+            background: #f8fafc;
+            color: #1e293b;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .swatch-dark {
+            background: #1e293b;
+            color: #f1f5f9;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        .swatch-dot {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #ec4899, #8b5cf6);
+            flex-shrink: 0;
+        }
+
+        /* Infos profil */
+        .profile-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0.75rem;
+            padding: 1rem 1.5rem 1.25rem;
+        }
+        .info-box {
+            background: var(--bg-light);
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+        }
+        .info-box-label {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-bottom: 2px;
+        }
+        .info-box-value {
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--text-dark);
+        }
+
+        /* Bouton danger */
+        .btn-danger {
+            background: #fef2f2;
+            color: var(--danger-color);
+            border: 1.5px solid #fecaca;
+            border-radius: 10px;
+            padding: 0.65rem 1.25rem;
+            font-weight: 600;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.2s;
+        }
+        .btn-danger:hover {
+            background: #fee2e2;
+            transform: translateY(-1px);
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar">
+    <div class="nav-container">
+        <div class="nav-logo">🌸 moon</div>
+        <ul class="nav-menu">
+            <li><a href="index.html" class="nav-link">Dashboard</a></li>
+            <li><a href="choix.html" class="nav-link">Ajouter</a></li>
+            <li><a href="#" class="nav-link">Historique</a></li>
+            <li><a href="#" class="nav-link active">Paramètres</a></li>
+            <li><a href="#" class="nav-link logout-btn" onclick="logout()">Déconnexion</a></li>
+        </ul>
+    </div>
+</nav>
+
+<div class="settings-page">
+
+    <p class="settings-page-title">⚙️ Paramètres</p>
+    <p class="settings-page-subtitle">Personnalise ton expérience Moon</p>
+
+    <!-- BLOC APPARENCE -->
+    <div class="settings-block">
+        <div class="settings-block-header"><h3>Apparence</h3></div>
+
+        <div class="settings-row">
+            <div class="settings-row-info">
+                <div class="settings-row-label">Thème sombre</div>
+                <div class="settings-row-desc">Passe en mode nuit pour reposer tes yeux</div>
+            </div>
+            <div class="toggle-wrap">
+                <input type="checkbox" class="toggle-input" id="dark-toggle">
+                <label class="toggle-track" for="dark-toggle">
+                    <span class="toggle-thumb"></span>
+                </label>
+            </div>
+        </div>
+
+        <div class="theme-preview">
+            <div class="theme-swatch swatch-light" id="swatch-light" onclick="setTheme('light')">
+                <span class="swatch-dot"></span> ☀️ Clair
+            </div>
+            <div class="theme-swatch swatch-dark" id="swatch-dark" onclick="setTheme('dark')">
+                <span class="swatch-dot"></span> 🌙 Sombre
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOC MON PROFIL -->
+    <div class="settings-block">
+        <div class="settings-block-header"><h3>Mon profil</h3></div>
+        <div class="profile-info-grid" id="profile-grid">
+            <div class="info-box">
+                <div class="info-box-label">Prénom</div>
+                <div class="info-box-value" id="info-name">—</div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-label">Email</div>
+                <div class="info-box-value" id="info-email">—</div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-label">Durée du cycle</div>
+                <div class="info-box-value" id="info-cycle">— jours</div>
+            </div>
+            <div class="info-box">
+                <div class="info-box-label">Durée des règles</div>
+                <div class="info-box-value" id="info-period">— jours</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- BLOC COMPTE -->
+    <div class="settings-block">
+        <div class="settings-block-header"><h3>Compte</h3></div>
+        <div class="settings-row">
+            <div class="settings-row-info">
+                <div class="settings-row-label">Supprimer mes données</div>
+                <div class="settings-row-desc">Efface toutes tes données locales de façon permanente</div>
+            </div>
+            <button class="btn-danger" onclick="deleteData()">Supprimer</button>
+        </div>
+        <div class="settings-row">
+            <div class="settings-row-info">
+                <div class="settings-row-label">Se déconnecter</div>
+                <div class="settings-row-desc">Retourne à l'écran de connexion</div>
+            </div>
+            <button class="btn-danger" onclick="logout()">Déconnexion</button>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // Guard
+    (function () {
+        const user = JSON.parse(localStorage.getItem("currentUser"));
+        if (!user || !user.email) window.location.href = "inscription.html";
+    })();
+
+    // Charger profil
+    const user = JSON.parse(localStorage.getItem("currentUser")) || {};
+    document.getElementById("info-name").textContent   = user.name         || "—";
+    document.getElementById("info-email").textContent  = user.email        || "—";
+    document.getElementById("info-cycle").textContent  = (user.cycle       || "—") + " jours";
+    document.getElementById("info-period").textContent = (user.periodLength || "—") + " jours";
+
+    // ===== DARK MODE =====
+    function applyTheme(mode) {
+        if (mode === "dark") {
+            document.body.classList.add("dark-mode");
+        } else {
+            document.body.classList.remove("dark-mode");
+        }
+        document.getElementById("dark-toggle").checked = (mode === "dark");
+        document.getElementById("swatch-light").classList.toggle("selected", mode === "light");
+        document.getElementById("swatch-dark").classList.toggle("selected",  mode === "dark");
+    }
+
+    function setTheme(mode) {
+        localStorage.setItem("moon-theme", mode);
+        applyTheme(mode);
+    }
+
+    // Init thème au chargement
+    const savedTheme = localStorage.getItem("moon-theme") || "light";
+    applyTheme(savedTheme);
+
+    // Toggle switch
+    document.getElementById("dark-toggle").addEventListener("change", function () {
+        setTheme(this.checked ? "dark" : "light");
+    });
+
+    // ===== ACTIONS COMPTE =====
+    function logout() {
+        localStorage.removeItem("currentUser");
+        window.location.href = "inscription.html";
+    }
+
+    function deleteData() {
+        if (confirm("⚠️ Toutes tes données seront supprimées définitivement. Continuer ?")) {
+            localStorage.clear();
+            window.location.href = "inscription.html";
+        }
+    }
+</script>
+
+</body>
+</html>
